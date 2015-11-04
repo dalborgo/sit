@@ -1,0 +1,14 @@
+{
+"sInfo": "Mostra da _START_ a _END_ su _TOTAL_ messaggi totali",
+        "sSearch": "Cerca:",
+        "sEmptyTable": "Nessun torneo in corso",
+	   "sInfoEmpty": "Caricamento...",
+	   "sLoadingRecords" : "Caricamento Giocatori...",
+	   "sProcessing" : "<img src='./media/images/loader.gif'>",
+ "oPaginate": {
+                                        "sFirst":    "  <<  ",
+                                        "sPrevious": " < ",
+                                        "sNext":     " > ",
+                                        "sLast":     "  >>  "
+                                }
+}
