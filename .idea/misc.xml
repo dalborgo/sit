@@ -7,9 +7,6 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="PhpServers">
-    <servers />
-  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings />

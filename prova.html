@@ -1,135 +1,8 @@
-<?php
-/**
- * Created by IntelliJ IDEA.
- * User: Scuola
- * Date: 10/06/2015
- * Time: 05:17
- */
-include "librerie/sql.php";
-include "librerie/fetch.php";
-if(isset($_GET['id']))
-    $ids=$_GET['id'];
-else
-    $ids="1";
-//$ore="24H";
-$sq = query("SELECT * from ss_sfida where id='$ids'");
-while (($ra = mysql_fetch_assoc($sq))) {
-    $id=$ra["id"];
-    $value=$ra["nick1"];
-    $value2=$ra["nick2"];
-    $totale=$ra["totale"];
-}
-$tipo="Last,$totale";
-$res=ccall('http://www.sharkscope.com/api/dalborgo/networks/PlayerGroup/players/sit_'.$value.'/completedTournaments?order='.$tipo);
-$res2=ccall('http://www.sharkscope.com/api/dalborgo/networks/PlayerGroup/players/sit_'.$value2.'/completedTournaments?order='.$tipo);
-//echo"";
-$base1=dati($res);
-$base2=dati($res2);
-$fd=$base1->str;
-$fd2=$base2->str;
-$diff=($base1->ult>=$base2->ult)?$base1->ult-$base2->ult:$base2->ult-$base1->ult;
-$wow=$base1->arr;
-$wow2=$base2->arr;
-$titolo="<div style='text-align:center'>";
-if($base1->ult>$base2->ult)
-    $titolo.="<span style='color:blue'><b>".$value."</span> + &euro;".$diff."</b>";
-else if($base2->ult>$base1->ult)
-    $titolo.="<span style='color:red'><b>".$value2."</span> + &euro;".$diff."</b>";
-else
-    $titolo.=$value." ALL SQUARE ".$value2 ;
-$titolo.="<br>Target: $totale sit </div>";
-function dati($res,$sec=0)
-{
-    $vuoto= new stdClass();
-    $vuoto->ult=0;
-    $vuoto->str="";
-    $vuoto->arr='{}';
-    $somma=0;
-    $str = "";
-    $ult = 0;
-    $gioc2 = $res->Response->PlayerResponse->PlayerView;
-    if (!isset($gioc2->PlayerGroup->CompletedTournaments->Tournament))
-        return $vuoto;
-    $conto = count($gioc2->PlayerGroup->CompletedTournaments->Tournament);
-    $out = array();
-    $j=0;
-    for( $i= $conto-1 ; $i >= 0 ; $i-- ){
-        //foreach ($gioc2->PlayerGroup->CompletedTournaments->Tournament as $key => $value) {
-        if ($conto < 2)
-            $value = $gioc2->PlayerGroup->CompletedTournaments->Tournament;
-        else
-            $value=$gioc2->PlayerGroup->CompletedTournaments->Tournament[$i];
-        $datec = "";
-        try {
-            $datec = new DateTime("@" . $value->{'@date'});
-            $datec->setTimezone(new DateTimeZone('Europe/Rome'));
-            $datec = $datec->format('d/m/Y H:i');
-        } catch (Exception $e) {
-        }
-        $pirce=0;$rake=0;$stake=0;$rebuy=0;$name="";$net="";$pos="";
-        if (isset($value->TournamentEntry->{'@prize'}))
-            $pirce=$value->TournamentEntry->{'@prize'};
-        if (isset($value->TournamentEntry->{'@position'}))
-            $pos=$value->TournamentEntry->{'@position'};
-        if (isset($value->{'@rake'}))
-            $rake=$value->{'@rake'};
-        if (isset($value->{'@name'}))
-            $name=$value->{'@name'};
-        if (isset($value->{'@stake'}))
-            $stake=$value->{'@stake'};
-        if (isset($value->{'@network'}))
-            $net=$value->{'@network'};
-        if (isset($value->{'@rebuyStake'}))
-            $rebuy=$value->{'@rebuyStake'};
-        $guad=0;
-        if($rebuy)
-            $guad=$pirce-($rake+$rebuy);
-        else
-            $guad=$pirce-($stake+$rake);
-        $somma+=$guad;
-        $obj2 = new stdClass();
-        $obj2->data=$datec;
-        $obj2->guad=($guad>=0)?'<span style="color:green">&euro; '.$guad.'</span>':'<span style="color:red">&euro; '.$guad.'</span>';
-        $obj2->nome=$name;
-        $obj2->net=$net;
-        $obj2->pos=$pos.'&deg;';
-        $out[++$j]=$obj2;
-        if($j==$conto){
-            $fre="{
-                dataLabels: {
-                enabled: true,
-                    align: 'left',
-                    format: '\u20AC {y}',
-                    style: {
-                    fontWeight: 'bold'
-                    },
-                    x: 3,
-                    verticalAlign: 'middle',
-                    overflow: true,
-                    crop: false
-                },
-                y: $somma
-            }";
-            $str.=$fre;
-            $ult=$somma;
-        }else
-            $str.=$somma.",";
-        if ($conto < 2)
-            return;
-    }
-    $obj = new stdClass();
-    $obj->str=$str;
-    $obj->arr=json_encode($out);
-    $obj->ult=$ult;
-    return $obj;
-}
-
-?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $value ?> VS <?php echo $value2 ?></title>
+    <title>navigator7709 VS rccgli89</title>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <!-- Additional files for the Highslide popup effect -->
@@ -139,19 +12,23 @@ function dati($res,$sec=0)
 
     <meta charset="UTF-8">
     <script type="application/javascript">
-        var wow = <?php echo $wow ?>;
-        var wow2 = <?php echo $wow2 ?>;
+        var wow = <br />
+        <font size='1'><table class='xdebug-error xe-notice' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+                <tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Notice: Array to string conversion in D:\xampp\htdocs\tmp\sit\hu.php on line <i>142</i></th></tr>
+        <tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+        <tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+        <tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0312</td><td bgcolor='#eeeeec' align='right'>159000</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='D:\xampp\htdocs\tmp\sit\hu.php' bgcolor='#eeeeec'>...\hu.php<b>:</b>0</td></tr>
+        </table></font>
+        Array;
+        var wow2 = {"1":{"data":"11\/11\/2015 14:08","guad":"<span style=\"color:green\">&euro; 4<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"2&deg;"},"2":{"data":"11\/11\/2015 14:09","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"9&deg;"},"3":{"data":"11\/11\/2015 14:14","guad":"<span style=\"color:green\">&euro; 0.88<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"4&deg;"},"4":{"data":"11\/11\/2015 14:19","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"6&deg;"},"5":{"data":"11\/11\/2015 14:22","guad":"<span style=\"color:green\">&euro; 2.32<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"3&deg;"},"6":{"data":"11\/11\/2015 14:34","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"6&deg;"},"7":{"data":"11\/11\/2015 15:39","guad":"<span style=\"color:green\">&euro; 0.88<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"4&deg;"},"8":{"data":"11\/11\/2015 15:40","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"8&deg;"},"9":{"data":"11\/11\/2015 15:44","guad":"<span style=\"color:green\">&euro; 0.88<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"4&deg;"},"10":{"data":"11\/11\/2015 15:46","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"11&deg;"},"11":{"data":"11\/11\/2015 15:48","guad":"<span style=\"color:green\">&euro; 8.8<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"1&deg;"},"12":{"data":"11\/11\/2015 16:49","guad":"<span style=\"color:green\">&euro; 8.8<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"1&deg;"},"13":{"data":"11\/11\/2015 16:52","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"7&deg;"},"14":{"data":"11\/11\/2015 16:52","guad":"<span style=\"color:red\">&euro; -2<\/span>","nome":"\u20ac2 NLH Max 15 giocatori","net":"iPoker.it","pos":"5&deg;"}};
         $(function () {
             $('#container').highcharts({
                 title: {
-                    text: <?php echo '"'.$titolo.'"' ?>,
+                    text: "<div style='text-align:center'><span style='color:red'><b>rccgli89</span> + &euro;12.56</b><br>Target: 100 sit </div>",
                     useHTML: true
                 },
                 chart: {
-                    marginRight: 90,
-                    backgroundColor: "#FFFBF0",
-                    borderRadius: 8,
-                    borderWidth: 1
+                    marginRight: 90
 
 
                 },
@@ -259,10 +136,24 @@ function dati($res,$sec=0)
                         }
                     }
                 },
-                series: [{name:<?php echo "'$value'" ?>,
-                    data: [0,<?php echo $fd ?>],color:'#0000FF',lineWidth: 2
-                }, {name:<?php echo "'$value2'" ?>,
-                    data: [0,<?php echo $fd2 ?>],color: '#FF0000',lineWidth: 2
+                series: [{name:'navigator7709',
+                    data: [0,],color:'#0000FF',lineWidth: 2
+                }, {name:'rccgli89',
+                    data: [0,4,2,2.88,0.88,3.2,1.2,2.08,0.08,0.96,-1.04,7.76,16.56,14.56,{
+                        dataLabels: {
+                            enabled: true,
+                            align: 'left',
+                            format: '\u20AC {y}',
+                            style: {
+                                fontWeight: 'bold'
+                            },
+                            x: 3,
+                            verticalAlign: 'middle',
+                            overflow: true,
+                            crop: false
+                        },
+                        y: 12.56
+                    }],color: '#FF0000',lineWidth: 2
                 }]
             });
         });
@@ -281,15 +172,11 @@ function dati($res,$sec=0)
             margin: 2px 0.4em;
             position: absolute;
         }
-        li.highslide-close {
-            background-image: url('media/images/close.png');
-            background-repeat: no-repeat;
-        }
     </style>
 </head>
 
 <body>
-<div id="container" style="height: 500px;width:100%;"></div>
+<div id="container" style="height: 500px;width:80%"></div>
 </body>
 
 </html>
