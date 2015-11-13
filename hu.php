@@ -37,7 +37,7 @@ else if($base2->ult>$base1->ult)
     $titolo.="<span style='color:red'><b>".$value2."</span> + &euro;".$diff."</b>";
 else
     $titolo.=$value." ALL SQUARE ".$value2 ;
-$titolo.="<br>Target: $totale sit </div>";
+$titolo.="<br><span style='font-size:medium'>Target: $totale sit </span></div>";
 function dati($res,$sec=0)
 {
     $vuoto= new stdClass();
@@ -94,12 +94,13 @@ function dati($res,$sec=0)
         $obj2->net=$net;
         $obj2->pos=$pos.'&deg;';
         $out[++$j]=$obj2;
+        //$somma=number_format($somma,2);
         if($j==$conto){
             $fre="{
                 dataLabels: {
                 enabled: true,
                     align: 'left',
-                    format: '\u20AC {y}',
+                    format: '\u20AC {y:.2f}',
                     style: {
                     fontWeight: 'bold'
                     },
